@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-const useAPI = (url) => {
+
+const useAPI = (url, skip = false) => {
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [hasError, setHasError] = useState(false)
@@ -7,7 +8,10 @@ const useAPI = (url) => {
 
 useEffect(() => {
     const fetchData = async () => {
-        setIsLoading(true)
+      if (skip) {
+        return
+      }  
+      setIsLoading(true)
         try {
             const response = await fetch(url)
             const result = await response.json()
@@ -16,7 +20,6 @@ useEffect(() => {
             } else {
               setHasError(true)
               setErrorMessage(`Error: ${result.error}`)
-              console.log(result)
             }
             setIsLoading(false)
           } catch (err) {
@@ -26,7 +29,7 @@ useEffect(() => {
           }
         }
       fetchData()
-    }, [])
+    }, [skip])
 return { data, isLoading, hasError, errorMessage }
   }
 export default useAPI
