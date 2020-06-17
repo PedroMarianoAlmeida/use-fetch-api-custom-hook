@@ -6,14 +6,14 @@ import useAPI from './useAPI';
 function App() {
   
   const url = 'https://api.nationalize.io?name=michael'
-  const { data } = useAPI(url)
+  const { data, isLoading } = useAPI(url)
 
   return (
     <div className="App">
       
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <h1>{data}</h1>
+        {isLoading? <h1>...loading</h1> : <h1>{data}</h1>}
       </header>
     </div>
   );
