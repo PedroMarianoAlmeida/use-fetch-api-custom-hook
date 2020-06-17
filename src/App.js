@@ -10,10 +10,14 @@ function App() {
   const [ skipHook, setSkipHook ] = React.useState(true);
   
   const url = 'https://api.nationalize.io?name=michael'
-  const  { data, isLoading, hasError, errorMessage }  = useAPI(url, skipHook)
+  const  { data, isLoading, hasError, errorMessage, updateUrl }  = useAPI(url, skipHook)
 
-  const handleClick = () => {
+  const handleClickCallHook = () => {
     setSkipHook(false);
+  }
+
+  const handleClickChangeParameter = () => {
+    updateUrl('https://api.nationalize.io?name=john')
   }
 
   return (
@@ -21,7 +25,9 @@ function App() {
       
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <button onClick={handleClick}>Call Hook</button>
+        <button onClick={handleClickCallHook}>Call Hook</button>
+        <button onClick={handleClickChangeParameter}>Change Parameter</button>
+
         {hasError? <h1>{errorMessage}</h1> : (isLoading? <h1>...loading</h1> : <h1>{data}</h1>)}
       </header>
     </div>

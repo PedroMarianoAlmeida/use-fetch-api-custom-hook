@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
-const useAPI = (url, skip = false) => {
+const useAPI = (initialUrl, skip = false) => {
+  const [url, updateUrl] = useState(initialUrl)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [hasError, setHasError] = useState(false)
@@ -29,7 +30,7 @@ useEffect(() => {
           }
         }
       fetchData()
-    }, [skip])
-return { data, isLoading, hasError, errorMessage }
+    }, [skip, url])
+return { data, isLoading, hasError, errorMessage, updateUrl }
   }
 export default useAPI
