@@ -1,11 +1,21 @@
 import { useState, useEffect } from 'react'
 
-const useAPI = (initialUrl, skip = false) => {
+const useAPI = (initialUrl, initialParams = {}, skip = false) => {
   const [url, updateUrl] = useState(initialUrl)
+  const [params, updateParamsHooks] = useState(initialParams)
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const [hasError, setHasError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+
+  const queryString = () => {
+    return `name=${params.name}`
+  }
+
+    const updateParams = (value) => {
+      console.log(`Adress:${url} Params: ${params.name}`)
+      updateParamsHooks({name: value});
+    }
 
 useEffect(() => {
     const fetchData = async () => {
@@ -14,7 +24,8 @@ useEffect(() => {
       }  
       setIsLoading(true)
         try {
-            const response = await fetch(url)
+          
+          const response = await fetch(`${url}${queryString()}`)
             const result = await response.json()
             if (response.ok) {
               setData(result.name)
@@ -30,7 +41,9 @@ useEffect(() => {
           }
         }
       fetchData()
-    }, [skip, url])
-return { data, isLoading, hasError, errorMessage, updateUrl }
-  }
+    }, [skip, url, params])
+
+    return { data, isLoading, hasError, errorMessage, updateUrl, updateParams }
+}
+
 export default useAPI
